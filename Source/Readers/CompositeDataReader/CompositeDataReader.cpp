@@ -146,26 +146,22 @@ CompositeDataReader::CompositeDataReader(const ConfigParameters& config) :
         m_streams.push_back(stream);
     }
 
+    size_t maxErrors = config(L"maxErrors", 0);
     switch (m_packingMode)
     {
     case PackingMode::sample:
         m_packer = std::make_shared<FramePacker>(
             m_sequenceEnumerator,
             m_streams,
-            localTimeline);
+            localTimeline,
+            maxErrors);
         break;
     case PackingMode::sequence:
-        m_packer = std::make_shared<SequencePacker>(
-            m_sequenceEnumerator,
-            m_streams);
+        m_packer = std::make_shared<SequencePacker>(m_sequenceEnumerator, m_streams, maxErrors);
         break;
     case PackingMode::truncated:
-    {
-        m_packer = std::make_shared<TruncatedBPTTPacker>(
-            m_sequenceEnumerator,
-            m_streams);
+        m_packer = std::make_shared<TruncatedBPTTPacker>(m_sequenceEnumerator, m_streams, maxErrors);
         break;
-    }
     default:
         LogicError("Unsupported type of packer '%d'.", (int)m_packingMode);
     }

@@ -33,7 +33,8 @@ protected:
 
     PackerBase(SequenceEnumeratorPtr sequenceEnumerator,
                const std::vector<StreamDescriptionPtr>& streams,
-               size_t numberOfBuffers);
+               size_t numberOfBuffers,
+               size_t maxNumberOfInvalidSequences);
 
     typedef std::vector<SequenceDataPtr> StreamBatch;
 
@@ -57,8 +58,13 @@ protected:
 
     virtual Sequences GetNextSequences()
     {
-        return m_sequenceEnumerator->GetNextSequences(m_config.m_minibatchSizeInSamples);
+        auto result = m_sequenceEnumerator->GetNextSequences(m_config.m_minibatchSizeInSamples);
+        CleanSequences(result);
+        return result;
     }
+
+    // Removes invalid sequences.
+    void CleanSequences(Sequences& sequences);
 
     SequenceEnumeratorPtr m_sequenceEnumerator;
 
@@ -88,6 +94,12 @@ protected:
 
     // Current config.
     ReaderConfiguration m_config;
+
+    // Number of sequences cleaned.
+    size_t m_numberOfCleanedSequences;
+
+    // Max number of allowed invalid sequences.
+    size_t m_maxNumberOfInvalidSequences;
 
 public:
     // Sets current epoch configuration.

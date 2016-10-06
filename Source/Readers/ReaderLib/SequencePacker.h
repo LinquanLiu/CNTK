@@ -17,8 +17,9 @@ public:
     SequencePacker(
         SequenceEnumeratorPtr sequenceEnumerator,
         const std::vector<StreamDescriptionPtr>& streams,
+        size_t maxNumberOfInvalidSequences = 0,
         size_t numberOfBuffers = 2) :
-        PackerBase(sequenceEnumerator, streams, numberOfBuffers)
+        PackerBase(sequenceEnumerator, streams, maxNumberOfInvalidSequences, numberOfBuffers)
     {}
 
     virtual Minibatch ReadMinibatch() override;

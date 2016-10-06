@@ -40,7 +40,6 @@ Minibatch SequencePacker::ReadMinibatch()
 {
     auto sequences = GetNextSequences();
     const auto& batch = sequences.m_data;
-
     Minibatch minibatch(sequences.m_endOfEpoch);
     if (batch.empty())
     {

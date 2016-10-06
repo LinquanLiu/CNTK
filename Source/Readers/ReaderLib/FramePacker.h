@@ -17,8 +17,9 @@ public:
         SequenceEnumeratorPtr sequenceEnumerator,
         const std::vector<StreamDescriptionPtr>& streams,
         bool useLocalTimeline = false,
+        size_t maxNumberOfInvalidSequences = 0,
         size_t numberOfBuffers = 2) :
-        SequencePacker(sequenceEnumerator, streams, numberOfBuffers), m_useLocalTimeline(useLocalTimeline)
+        SequencePacker(sequenceEnumerator, streams, maxNumberOfInvalidSequences, numberOfBuffers), m_useLocalTimeline(useLocalTimeline)
     {}
 
 protected:
